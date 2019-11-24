@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (C) 2018 - Today: GRAP (http://www.grap.coop)
 # @author: Sylvain LE GAL (https://twitter.com/legalsylvain)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
@@ -8,7 +7,7 @@
     'summary': 'In the supplier invoice, automatically update all products '
                'whose standard price on the line is different from '
                ' the product standard price',
-    'version': '8.0.1.0.0',
+    'version': "12.0.1.0.0",
     'category': 'Accounting & Finance',
     'author': 'GRAP',
     'license': 'AGPL-3',
@@ -28,5 +27,5 @@
     'images': [
         'static/description/wizard_form.png',
     ],
-    'installable': False,
+    'installable': True,
 }
