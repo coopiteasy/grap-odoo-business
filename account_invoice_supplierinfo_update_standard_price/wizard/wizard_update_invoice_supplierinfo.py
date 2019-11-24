@@ -11,8 +11,7 @@ class WizardUpdateInvoiceSupplierinfo(models.TransientModel):
     @api.multi
     def update_supplierinfo(self):
         self.ensure_one()
-        res = super(
-            WizardUpdateInvoiceSupplierinfo, self).update_supplierinfo()
+        res = super().update_supplierinfo()
 
         for line in self.line_ids.filtered(lambda x: x.product_id):
             line.product_id.standard_price = line.new_standard_price

@@ -16,7 +16,7 @@
         'account_invoice_supplierinfo_update_triple_discount',
     ],
     'data': [
-        # 'wizard/wizard_update_invoice_supplierinfo.xml',
+        'wizard/wizard_update_invoice_supplierinfo.xml',
         # 'views/view_account_invoice.xml',
         # 'views/view_product_template.xml',
     ],

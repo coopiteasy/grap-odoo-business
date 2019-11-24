@@ -44,12 +44,12 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def _get_update_supplierinfo_lines(self):
-        product_obj = self.env['product.product']
-        res = super(AccountInvoice, self)._get_update_supplierinfo_lines()
+        ProductProduct = self.env['product.product']
+        res = super()._get_update_supplierinfo_lines()
         new_res = []
         for line in res:
             # Remove products that represent distributed cost
-            product = product_obj.browse(line[2]['product_id'])
+            product = ProductProduct.browse(line[2]['product_id'])
             if not product.is_impact_standard_price:
                 new_res.append(line)
         return new_res

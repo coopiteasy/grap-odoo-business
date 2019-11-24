@@ -16,12 +16,13 @@ class AccountInvoiceLine(models.Model):
         if not self.product_id:
             return 0
         else:
-            factor = 1
-            if self.uos_id and self.uos_id.id != self.product_id.uom_id.id:
-                # Making conversion
-                factor =\
-                    self.uos_id.factor_inv\
-                    / self.product_id.uom_id.factor_inv
+            # factor = 1
+            # if self.uos_id and self.uos_id.id != self.product_id.uom_id.id:
+            #     # Making conversion
+            #     factor =\
+            #         self.uos_id.factor_inv\
+            #         / self.product_id.uom_id.factor_inv
+            # TODO, handle multiple UoS for line_shared_cost computation
             if self.invoice_id.product_expense_total != 0:
                 line_shared_cost =\
                     self.invoice_id.distributed_expense_total * (
@@ -32,12 +33,12 @@ class AccountInvoiceLine(models.Model):
                     "We can't check prices"
                     " for a invoice whose total is null"))
             return (
-                line_shared_cost / self.quantity + (
-                    self.price_unit *
+                line_shared_cost + (
+                    self._get_unit_price_in_purchase_uom() *
                     (1 - self.discount / 100) *
                     (1 - self.discount2 / 100) *
                     (1 - self.discount3 / 100))
-            ) / factor
+            )
 
     @api.multi
     def _is_correct_partner_info(self, partnerinfo):
@@ -54,9 +55,8 @@ class AccountInvoiceLine(models.Model):
                 precision_digits=precision_obj.precision_get('Product Price'))
 
     @api.multi
-    def _prepare_supplier_wizard_line(self, supplierinfo, partnerinfo):
-        res = super(AccountInvoiceLine, self)._prepare_supplier_wizard_line(
-            supplierinfo, partnerinfo)
+    def _prepare_supplier_wizard_line(self, supplierinfo):
+        res = super()._prepare_supplier_wizard_line(supplierinfo)
         if self.product_id:
             res.update({
                 'current_standard_price': self.product_id.standard_price,
