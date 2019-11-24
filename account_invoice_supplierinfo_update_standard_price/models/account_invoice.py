@@ -23,23 +23,23 @@ class AccountInvoice(models.Model):
 
     @api.multi
     @api.depends(
-        'invoice_line.product_id.is_impact_standard_price',
-        'invoice_line.price_subtotal')
+        'invoice_line_id.product_id.is_impact_standard_price',
+        'invoice_line_id.price_subtotal')
     def _compute_expense_total(self):
         for invoice in self.filtered(lambda x: x.type == 'in_invoice'):
             invoice.update({
                 'product_expense_total': sum(
-                    invoice.invoice_line.filtered(
+                    invoice.invoice_line_id.filtered(
                         lambda x:
                             not x.product_id or
                             not x.product_id.is_impact_standard_price
-                        ).mapped('price_subtotal')),
+                    ).mapped('price_subtotal')),
                 'distributed_expense_total': sum(
-                    invoice.invoice_line.filtered(
+                    invoice.invoice_line_id.filtered(
                         lambda x:
                             x.product_id and
                             x.product_id.is_impact_standard_price
-                        ).mapped('price_subtotal')),
+                    ).mapped('price_subtotal')),
             })
 
     @api.multi

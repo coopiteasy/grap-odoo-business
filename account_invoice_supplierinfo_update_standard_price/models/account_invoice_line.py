@@ -37,7 +37,7 @@ class AccountInvoiceLine(models.Model):
                     (1 - self.discount / 100) *
                     (1 - self.discount2 / 100) *
                     (1 - self.discount3 / 100))
-                ) / factor
+            ) / factor
 
     @api.multi
     def _is_correct_partner_info(self, partnerinfo):

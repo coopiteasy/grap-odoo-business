@@ -9,7 +9,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
     <record id="transport_costs_product" model="product.product">
         <field name="name">Demo Transport costs</field>
         <field name="categ_id" ref="product.product_category_all"/>
-        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="uom_id" ref="uom.product_uom_unit"/>
         <field name="is_impact_standard_price" eval="True"/>
     </record>
 
