@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2019 - Today: GRAP (http://www.grap.coop)
+@author: Sylvain LE GAL (https://twitter.com/legalsylvain)
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+-->
+<odoo>
+
+    <record id="invoice" model="account.invoice">
+        <field name="partner_id" ref="base.res_partner_12"/>
+        <field name="type">in_invoice</field>
+    </record>
+
+    <record id="line_1" model="account.invoice.line">
+        <field name="name">Corner</field>
+        <field name="invoice_id" ref="invoice"/>
+        <field name="product_id" ref="product.product_product_5"/>
+        <field name="account_id" ref="purchase_account"/>
+        <field name="price_unit">1000</field>
+    </record>
+
+    <record id="line_2" model="account.invoice.line">
+        <field name="name">Line 2</field>
+        <field name="invoice_id" ref="invoice"/>
+        <field name="product_id" ref="transport_costs_product"/>
+        <field name="account_id" ref="purchase_account"/>
+        <field name="price_unit">100</field>
+    </record>
+
+</odoo>
+

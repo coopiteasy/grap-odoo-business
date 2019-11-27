@@ -17,11 +17,13 @@
     ],
     'data': [
         'wizard/wizard_update_invoice_supplierinfo.xml',
-        # 'views/view_account_invoice.xml',
-        # 'views/view_product_template.xml',
+        'views/view_account_invoice.xml',
+        'views/view_product_template.xml',
     ],
     'demo': [
+        'demo/account_account.xml',
         'demo/product_product.xml',
+        'demo/account_invoice.xml',
     ],
     'pre_init_hook': 'pre_init_hook',
     'images': [
