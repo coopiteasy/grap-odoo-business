@@ -12,19 +12,32 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
     </record>
 
     <record id="line_1" model="account.invoice.line">
-        <field name="name">Corner</field>
+        <field name="name">Corner (Demo)</field>
         <field name="invoice_id" ref="invoice"/>
         <field name="product_id" ref="product.product_product_5"/>
         <field name="account_id" ref="purchase_account"/>
         <field name="price_unit">1000</field>
+        <field name="quantity">10</field>
+        <field name="discount">10</field>
+        <field name="discount2">20</field>
+        <field name="discount3">30</field>
     </record>
 
     <record id="line_2" model="account.invoice.line">
-        <field name="name">Line 2</field>
+        <field name="name">Large Cabinet (Demo)</field>
+        <field name="invoice_id" ref="invoice"/>
+        <field name="product_id" ref="product.product_product_6"/>
+        <field name="account_id" ref="purchase_account"/>
+        <field name="price_unit">500</field>
+        <field name="quantity">5</field>
+    </record>
+
+    <record id="line_3" model="account.invoice.line">
+        <field name="name">Transport Line (Demo)</field>
         <field name="invoice_id" ref="invoice"/>
         <field name="product_id" ref="transport_costs_product"/>
         <field name="account_id" ref="purchase_account"/>
-        <field name="price_unit">100</field>
+        <field name="price_unit">1000</field>
     </record>
 
 </odoo>

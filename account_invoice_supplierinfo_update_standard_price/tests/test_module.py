@@ -9,12 +9,13 @@ from odoo.addons.account_invoice_supplierinfo_update.tests.test_account_invoice_
 class TestModule(Tests):
 
     def setUp(self):
-        self.product2.is_impact_standard_price = True
+        # self.product2.is_impact_standard_price = True
         super().setUp()
-    #     self.WizardUpdate = self.env['wizard.update.invoice.supplierinfo']
+        self.WizardUpdate = self.env['wizard.update.invoice.supplierinfo']
     #     self.ProductSupplierinfo = self.env['product.supplierinfo']
     #     self.AccountInvoiceLine = self.env['account.invoice.line']
-    #     self.invoice = self.env.ref('account.demo_invoice_0')
+        self.invoice = self.env.ref(
+            "account_invoice_supplierinfo_update_standard_price.invoice")
     #     self.invoice_line_0 = self.env.ref(
     #         'account.demo_invoice_0_line_rpanrearpanelshe0')
     #     self.invoice_line_1 = self.env.ref(
