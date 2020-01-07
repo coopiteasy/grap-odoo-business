@@ -2,22 +2,28 @@
 # @author: Sylvain LE GAL (https://twitter.com/legalsylvain)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-# from odoo.tests.common import TransactionCase
-from odoo.addons.account_invoice_supplierinfo_update.tests.test_account_invoice_supplierinfo_update import Tests
+from odoo.tests.common import TransactionCase
+# from odoo.addons.account_invoice_supplierinfo_update.tests.test_account_invoice_supplierinfo_update import Tests
 
 
-class TestModule(Tests):
+class TestModule(TransactionCase):
 
     def setUp(self):
         # self.product2.is_impact_standard_price = True
         super().setUp()
         self.WizardUpdate = self.env['wizard.update.invoice.supplierinfo']
-    #     self.ProductSupplierinfo = self.env['product.supplierinfo']
+        self.ProductSupplierinfo = self.env['product.supplierinfo']
     #     self.AccountInvoiceLine = self.env['account.invoice.line']
-        self.invoice = self.env.ref(
-            "account_invoice_supplierinfo_update_standard_price.invoice")
-    #     self.invoice_line_0 = self.env.ref(
-    #         'account.demo_invoice_0_line_rpanrearpanelshe0')
+        self.invoice_1 = self.env.ref(
+            "account_invoice_supplierinfo_update_standard_price.invoice_1")
+        self.line_1_1 = self.env.ref(
+            'account_invoice_supplierinfo_update_standard_price.line_1_1')
+        self.line_1_2 = self.env.ref(
+            'account_invoice_supplierinfo_update_standard_price.line_1_2')
+        self.invoice_2 = self.env.ref(
+            "account_invoice_supplierinfo_update_standard_price.invoice_2")
+        self.line_2_1 = self.env.ref(
+            'account_invoice_supplierinfo_update_standard_price.line_2_1')
     #     self.invoice_line_1 = self.env.ref(
     #         'account.demo_invoice_0_line_rckrackcm0')
     #     self.toner_template = self.env.ref(
@@ -25,96 +31,117 @@ class TestModule(Tests):
     #     self.transport_costs_product = self.env.ref(
     #         'account_invoice_supplierinfo_update_standard_price'
     #         '.transport_costs_product')
-    #     self.dozen_unit = self.env.ref('product.product_uom_dozen')
+        self.dozen_unit = self.env.ref('uom.product_uom_dozen')
+        self.uom_unit = self.env.ref('uom.product_uom_unit')
 
-    # # Test Section
-    # def test_01_standard_price(self):
-    #     # Set discounts on account lines
-    #     self.invoice_line_0.write({
-    #         'price_unit': 1000,
-    #         'discount': 10.0,
-    #         'discount2': 20.0,
-    #         'discount3': 30.0,
-    #         'uos_id': self.dozen_unit.id,
-    #     })
+    # Test Section
+    def test_01_standard_price(self):
+        # Set discounts on account lines
+        self.line_2_1.write({
+            'price_unit': 1000,
+            'discount': 10.0,
+            'discount2': 20.0,
+            'discount3': 30.0,
+            'uom_id': self.uom_unit.id,
+        })
 
-    #     # Launch and confirm Wizard
-    #     lines_for_update = self.invoice._get_update_supplierinfo_lines()
-    #     wizard = self.WizardUpdate.with_context(
-    #         default_line_ids=lines_for_update,
-    #         default_invoice_id=self.invoice.id).create({})
-    #     wizard.update_supplierinfo()
+        # Launch and confirm Wizard
+        lines_for_update = self.invoice_2._get_update_supplierinfo_lines()
+        wizard = self.WizardUpdate.with_context(
+            default_line_ids=lines_for_update,
+            default_invoice_id=self.invoice_2.id).create({})
+        wizard.update_supplierinfo()
 
-    #     # Check Regressions
-    #     supplierinfo = self.ProductSupplierinfo.search([
-    #         ('product_tmpl_id', '=', self.toner_template.id),
-    #         ('name', '=', self.invoice.partner_id.id)])
+        # Check Regressions
+        supplierinfo = self.ProductSupplierinfo.search([
+            ('product_tmpl_id', '=', self.line_2_1.product_id.product_tmpl_id.id),
+            ('name', '=', self.invoice_2.partner_id.id)])
 
-    #     # self.assertEqual(
-    #     #     len(supplierinfo), 1,
-    #     #     "Regression : Confirming wizard should have create a supplierinfo")
-    #     # partnerinfo = self.partnerinfo_obj.search([
-    #     #     ('suppinfo_id', '=', supplierinfo.id)])
-    #     # self.assertEqual(
-    #     #     len(partnerinfo), 1,
-    #     #     "Regression : Confirming wizard should have create a partnerinfo")
-    #     # self.assertEqual(
-    #     #     partnerinfo.discount, 10,
-    #     #     "Regression : Confirming wizard should have update main discount")
-    #     # self.assertEqual(
-    #     #     partnerinfo.discount2, 20,
-    #     #     "Confirming wizard should have update discount #2")
-    #     # self.assertEqual(
-    #     #     partnerinfo.discount3, 30,
-    #     #     "Confirming wizard should have update discount #3")
+        self.assertEqual(
+            len(supplierinfo), 1,
+            "Regression : Confirming wizard should have create a supplierinfo")
 
-    #     # Check Correct Standard Price
-    #     self.assertEqual(
-    #         self.invoice_line_0.product_id.standard_price,
-    #         42,  # (1000 * 0.9 * 0.8 * 0.7) / 12
-    #         "Confirming wizard should have updated Product standard price")
+        self.assertEqual(
+            supplierinfo.discount, 10,
+            "Regression : Confirming wizard should have update main discount")
+        self.assertEqual(
+            supplierinfo.discount2, 20,
+            "Confirming wizard should have update discount #2")
+        self.assertEqual(
+            supplierinfo.discount3, 30,
+            "Confirming wizard should have update discount #3")
 
-    # # Test Section
-    # def test_02_shared_cost(self):
-    #     # Adding transport cost of 7 € on an invoice of 14 € (14 + 10)
-    #     self.AccountInvoiceLine.create({
-    #         'name': 'Landing Costs',
-    #         'invoice_id': self.invoice.id,
-    #         'product_id': self.transport_costs_product.id,
-    #         'quantity': 1,
-    #         'price_unit': 7,
-    #     })
+        # Check Correct Standard Price
+        self.assertEqual(
+            self.line_2_1.product_id.standard_price,
+            504,  # (1000 * 0.9 * 0.8 * 0.7)
+            "Confirming wizard should have updated Product standard price")
 
-    #     self.assertEqual(
-    #         self.invoice.product_expense_total, 14,
-    #         "Bad computation of the field 'Product Expenses Total'")
+    def test_02_standard_price_different_uom(self):
+        # Set discounts on account lines
+        self.line_2_1.write({
+            'price_unit': 1000,
+            'discount': 10.0,
+            'discount2': 20.0,
+            'discount3': 30.0,
+            'uom_id': self.dozen_unit.id,
+        })
 
-    #     self.assertEqual(
-    #         self.invoice.distributed_expense_total, 7,
-    #         "Bad computation of the field 'Distributed Expenses Total'")
+        # Launch and confirm Wizard
+        lines_for_update = self.invoice_2._get_update_supplierinfo_lines()
+        wizard = self.WizardUpdate.with_context(
+            default_line_ids=lines_for_update,
+            default_invoice_id=self.invoice_2.id).create({})
+        wizard.update_supplierinfo()
 
-    #     # Check that transport cost are ignored from the wizard
-    #     lines_for_update = self.invoice._get_update_supplierinfo_lines()
-    #     self.assertEqual(
-    #         len(lines_for_update), 2,
-    #         "Update wizard should not update 'Impact Standard Price' Product.")
+        # Check Correct Standard Price
+        self.assertEqual(
+            self.line_2_1.product_id.standard_price,
+            42,  # (1000 * 0.9 * 0.8 * 0.7) / 12
+            "Confirming wizard should have updated Product standard price")
 
-    #     # Launch and confirm Wizard
-    #     wizard = self.WizardUpdate.with_context(
-    #         default_line_ids=lines_for_update,
-    #         default_invoice_id=self.invoice.id).create({})
-    #     wizard.update_supplierinfo()
 
-    #     # Check Correct Standard Price
-    #     self.assertEqual(
-    #         self.invoice_line_0.product_id.standard_price,
-    #         15,  # 10 (Unit Price) + 5 (= 7 * (10 / 14)
-    #         "Landing cost should impact standard price of the purchased"
-    #         " product")
+    def test_03_shared_cost(self):
+        self.assertEqual(
+            self.invoice_1.product_expense_total,
+            (1000 * 10 * 0.9 * 0.8 * 0.7) + 500 * 5,
+            "Bad computation of the field 'Product Expenses Total'")
 
-    #     # Check Correct Standard Price
-    #     self.assertEqual(
-    #         self.invoice_line_1.product_id.standard_price,
-    #         6,  # 4 (Unit Price) + 2 (= 7 * (4 / 14)
-    #         "Landing cost should impact standard price of the purchased"
-    #         " product")
+        self.assertEqual(
+            self.invoice_1.distributed_expense_total,
+            1000,
+            "Bad computation of the field 'Distributed Expenses Total'")
+
+        # Check that transport cost are ignored from the wizard
+        lines_for_update = self.invoice_1._get_update_supplierinfo_lines()
+
+
+        # Launch and confirm Wizard
+        wizard = self.WizardUpdate.with_context(
+            default_line_ids=lines_for_update,
+            default_invoice_id=self.invoice_1.id).create({})
+
+        self.assertEqual(
+            len(wizard.line_ids), 2,
+            "Update wizard should only two lines, ignoring Impact standard price")
+
+
+        self.assertEqual(
+            set([wizard.line_ids[0].product_id.id, wizard.line_ids[1].product_id.id]),
+            set([self.line_1_1.product_id.id, self.line_1_2.product_id.id]),
+            "Update wizard should update all the expenses products.")
+        wizard.update_supplierinfo()
+
+        # Check Correct Standard Price
+        self.assertEqual(
+            self.invoice_line_0.product_id.standard_price,
+            1172.44,  # (5040 / 10) + 1000 * (5040 / 7540)
+            "Landing cost should impact standard price of the purchased"
+            " product")
+
+        # Check Correct Standard Price
+        self.assertEqual(
+            self.invoice_line_1.product_id.standard_price,
+            831.56,  # (500) + 1000 * (2500 / 7540)
+            "Landing cost should impact standard price of the purchased"
+            " product")
