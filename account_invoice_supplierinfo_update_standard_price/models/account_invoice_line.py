@@ -50,7 +50,6 @@ class AccountInvoiceLine(models.Model):
                 self._get_standard_price(),
                 precision_digits=DecimalPrecision.precision_get('Product Price'))
 
-
     @api.multi
     def _prepare_supplier_wizard_line(self, supplierinfo):
         res = super()._prepare_supplier_wizard_line(supplierinfo)

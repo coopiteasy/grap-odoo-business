@@ -2,3 +2,5 @@ account-invoicing
 account-fiscal-rule
 l10n-france
 web
+
+account_invoicing_triple_discount https://github.com/legalsylvain/account-invoicing 12.0-mig-account_invoice_supplierinfo_update_discount

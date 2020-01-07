@@ -3,17 +3,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests.common import TransactionCase
-# from odoo.addons.account_invoice_supplierinfo_update.tests.test_account_invoice_supplierinfo_update import Tests
 
 
 class TestModule(TransactionCase):
 
     def setUp(self):
-        # self.product2.is_impact_standard_price = True
         super().setUp()
         self.WizardUpdate = self.env['wizard.update.invoice.supplierinfo']
         self.ProductSupplierinfo = self.env['product.supplierinfo']
-    #     self.AccountInvoiceLine = self.env['account.invoice.line']
         self.invoice_1 = self.env.ref(
             "account_invoice_supplierinfo_update_standard_price.invoice_1")
         self.line_1_1 = self.env.ref(
@@ -24,13 +21,6 @@ class TestModule(TransactionCase):
             "account_invoice_supplierinfo_update_standard_price.invoice_2")
         self.line_2_1 = self.env.ref(
             'account_invoice_supplierinfo_update_standard_price.line_2_1')
-    #     self.invoice_line_1 = self.env.ref(
-    #         'account.demo_invoice_0_line_rckrackcm0')
-    #     self.toner_template = self.env.ref(
-    #         'product.product_product_39_product_template')
-    #     self.transport_costs_product = self.env.ref(
-    #         'account_invoice_supplierinfo_update_standard_price'
-    #         '.transport_costs_product')
         self.dozen_unit = self.env.ref('uom.product_uom_dozen')
         self.uom_unit = self.env.ref('uom.product_uom_unit')
 
@@ -100,7 +90,6 @@ class TestModule(TransactionCase):
             42,  # (1000 * 0.9 * 0.8 * 0.7) / 12
             "Confirming wizard should have updated Product standard price")
 
-
     def test_03_shared_cost(self):
         self.assertEqual(
             self.invoice_1.product_expense_total,
@@ -115,7 +104,6 @@ class TestModule(TransactionCase):
         # Check that transport cost are ignored from the wizard
         lines_for_update = self.invoice_1._get_update_supplierinfo_lines()
 
-
         # Launch and confirm Wizard
         wizard = self.WizardUpdate.with_context(
             default_line_ids=lines_for_update,
@@ -124,7 +112,6 @@ class TestModule(TransactionCase):
         self.assertEqual(
             len(wizard.line_ids), 2,
             "Update wizard should only two lines, ignoring Impact standard price")
-
 
         self.assertEqual(
             set([wizard.line_ids[0].product_id.id, wizard.line_ids[1].product_id.id]),
