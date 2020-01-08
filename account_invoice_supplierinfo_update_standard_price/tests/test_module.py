@@ -121,14 +121,14 @@ class TestModule(TransactionCase):
 
         # Check Correct Standard Price
         self.assertEqual(
-            self.invoice_line_0.product_id.standard_price,
+            round(self.line_1_1.product_id.standard_price, 2),
             1172.44,  # (5040 / 10) + 1000 * (5040 / 7540)
             "Landing cost should impact standard price of the purchased"
             " product")
 
         # Check Correct Standard Price
         self.assertEqual(
-            self.invoice_line_1.product_id.standard_price,
-            831.56,  # (500) + 1000 * (2500 / 7540)
+            round(self.line_1_2.product_id.standard_price, 2),
+            831.56,  # (500) + 1000 * (2500 / 7540)
             "Landing cost should impact standard price of the purchased"
             " product")
